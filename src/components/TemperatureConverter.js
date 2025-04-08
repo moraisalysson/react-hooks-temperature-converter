@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 
 const TemperatureConverter = () => {
+  let [temperature, setTemperature] = useState("");
+
+  const handleTemperature = (valorTecla) => {
+    setTemperature(temperature + valorTecla);
+  };
+  
   return (
     <>
       <aside className="areaResultado">
-        <input id="user-temp" defaultValue="" />
+        <input id="user-temp" defaultValue={ temperature } />
         <select id="user-choice">
           <option value="C">Celsius</option>
           <option value="F">Fahrenheit</option>
@@ -36,8 +42,8 @@ const TemperatureConverter = () => {
         <button className="n1 tecla">1</button>
         <button className="n2 tecla">2</button>
         <button className="n3 tecla">3</button>
-        <button className="n4 tecla">4</button>
-        <button className="n5 tecla">5</button>
+        <button onClick={() => handleTemperature("4")} className="n4 tecla">4</button>
+        <button onClick={() => handleTemperature("5")} className="n5 tecla">5</button>
         <button className="n6 tecla">6</button>
         <button className="n7 tecla">7</button>
         <button className="n8 tecla">8</button>
