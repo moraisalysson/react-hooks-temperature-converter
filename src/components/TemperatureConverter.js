@@ -29,7 +29,7 @@ const TemperatureConverter = () => {
   };
 
   const handleBackspace = () => {
-    setTemperature(temperature.slice(0, temperature.length-1));
+    setTemperature(temperature.slice(0, -1));
   };
   
   return (
