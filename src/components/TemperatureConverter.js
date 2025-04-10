@@ -4,38 +4,117 @@ const TemperatureConverter = () => {
   let [temperature, setTemperature] = useState("");
 
   const handleTemperature = (valorTecla) => {
-    if(valorTecla === "." && temperature.includes(".")) {
+    if (valorTecla === "." && temperature.includes(".")) {
       return false;
     }
 
-    if(valorTecla === "." && (temperature === "" || temperature === "-")) {
+    if (valorTecla === "." && (temperature === "" || temperature === "-")) {
       setTemperature(temperature + "0.");
       return true;
     }
 
-    if(valorTecla === "0" && (temperature === "" || temperature === "-")) {
+    if (valorTecla === "0" && (temperature === "" || temperature === "-")) {
       setTemperature(temperature);
       return true;
     }
-    
-    if(valorTecla === "-" && temperature === "") {
+
+    if (valorTecla === "-" && temperature === "") {
       setTemperature(valorTecla);
       return true;
     }
 
-    if(valorTecla !== "-") {
+    if (valorTecla !== "-") {
       setTemperature(temperature + valorTecla);
-    }    
+    }
   };
 
   const handleBackspace = () => {
-    setTemperature(temperature.slice(0, -1));
+    setTemperature(temperature.toString().slice(0, -1));
   };
+
+  const convertToCelsius = (fromTemp) => {
+    temperature = Number(temperature);
+
+    switch(fromTemp) {
+      case "C":
+        return temperature.toFixed(2);
+      case "F":
+        return ((temperature - 32) * 5 / 9).toFixed(2);
+      case "K":
+        return (temperature - 273.15).toFixed(2);
+      default:
+        return 0;
+    }
+  }
+  const convertToFahrenheit = (fromTemp) => {
+    temperature = Number(temperature);
+
+    switch(fromTemp) {
+      case "C":
+        return ((temperature * 9)/5 + 32).toFixed(2);
+      case "F":
+        return temperature.toFixed(2);
+      case "K":
+        return ((temperature - 273.15) * 9 / 5 + 32).toFixed(2);
+      default:
+        return 0;
+    }
+  }
+  
+  const convertToKelvin = (fromTemp) => {
+    temperature = Number(temperature);
+
+    switch(fromTemp) {
+      case "C":
+        return (temperature * 273.15).toFixed(2);
+      case "F":
+        return ((temperature - 32) * 5 / 9 + 273.15).toFixed(2);
+      case "K":
+        return temperature.toFixed(2);
+      default:
+        return 0;
+    }
+  }
+
+  const handleConverter = () => {
+    temperature = Number(temperature);
+    
+    const fromTemp = document.querySelector("#user-choice").options[document.querySelector("#user-choice").selectedIndex].value;
+
+    console.log(fromTemp);
+
+    if(fromTemp === "C") {
+      const celsiusTemperature = convertToCelsius(fromTemp);
+      const fahrenheitTemperature = convertToFahrenheit(fromTemp);
+      const kelvinTemperature = convertToKelvin(fromTemp);
+      console.log("Kelvin: ", kelvinTemperature);
+      console.log("Fahrenheit: ", fahrenheitTemperature);
+      console.log("Celsius: ", celsiusTemperature);
+    }
+
+    if(fromTemp === "F") {
+      const fahrenheitTemperature = convertToFahrenheit(fromTemp);
+      const celsiusTemperature = convertToCelsius(fromTemp);
+      const kelvinTemperature = convertToKelvin(fromTemp);
+      console.log("Kelvin: ", kelvinTemperature);
+      console.log("Fahrenheit: ", fahrenheitTemperature);
+      console.log("Celsius: ", celsiusTemperature);
+    }
+
+    if(fromTemp === "K") {
+      const kelvinTemperature = convertToKelvin(fromTemp);
+      const celsiusTemperature = convertToCelsius(fromTemp);
+      const fahrenheitTemperature = convertToFahrenheit(fromTemp);
+      console.log("Kelvin: ", kelvinTemperature);
+      console.log("Fahrenheit: ", fahrenheitTemperature);
+      console.log("Celsius: ", celsiusTemperature);
+    }
+  }
   
   return (
     <>
       <aside className="areaResultado">
-        <input id="user-temp" defaultValue={ temperature } />
+        <input id="user-temp" defaultValue={temperature} />
         <select id="user-choice">
           <option value="C">Celsius</option>
           <option value="F">Fahrenheit</option>
@@ -59,7 +138,7 @@ const TemperatureConverter = () => {
         <span>
           <sup>o</sup>K
         </span>
-        <button className="tecla" id="converter">
+        <button onClick={() => handleConverter()} className="tecla" id="converter">
           Converter
         </button>
       </aside>
