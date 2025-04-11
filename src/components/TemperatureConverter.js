@@ -2,6 +2,9 @@ import React, { useState } from "react";
 
 const TemperatureConverter = () => {
   let [temperature, setTemperature] = useState("");
+  const userSelect = document.querySelector("#user-choice");
+  const teclas = document.querySelectorAll(".tecla");
+  const resultados = document.querySelectorAll(".result");
 
   const handleTemperature = (valorTecla) => {
     if (valorTecla === "." && temperature.includes(".")) {
@@ -76,39 +79,58 @@ const TemperatureConverter = () => {
     }
   }
 
+  const insertTempsInHTML = (fromTemp) => {
+    const resultCelsius = document.querySelector("#celsius-temp");
+    const resultFarhrenheit = document.querySelector("#fahrenheit-temp");
+    const resultKelvin = document.querySelector("#kelvin-temp");
+
+    resultCelsius.insertAdjacentHTML("afterbegin", convertToCelsius(fromTemp));
+    resultFarhrenheit.insertAdjacentHTML("afterbegin", convertToFahrenheit(fromTemp));
+    resultKelvin.insertAdjacentHTML("afterbegin", convertToKelvin(fromTemp));
+  }
+
   const handleConverter = () => {
     temperature = Number(temperature);
+
+    if(temperature === "-0") {
+      setTemperature("0");
+    }
     
     const fromTemp = document.querySelector("#user-choice").options[document.querySelector("#user-choice").selectedIndex].value;
 
-    console.log(fromTemp);
-
     if(fromTemp === "C") {
-      const celsiusTemperature = convertToCelsius(fromTemp);
-      const fahrenheitTemperature = convertToFahrenheit(fromTemp);
-      const kelvinTemperature = convertToKelvin(fromTemp);
-      console.log("Kelvin: ", kelvinTemperature);
-      console.log("Fahrenheit: ", fahrenheitTemperature);
-      console.log("Celsius: ", celsiusTemperature);
+      insertTempsInHTML(fromTemp);
     }
 
     if(fromTemp === "F") {
-      const fahrenheitTemperature = convertToFahrenheit(fromTemp);
-      const celsiusTemperature = convertToCelsius(fromTemp);
-      const kelvinTemperature = convertToKelvin(fromTemp);
-      console.log("Kelvin: ", kelvinTemperature);
-      console.log("Fahrenheit: ", fahrenheitTemperature);
-      console.log("Celsius: ", celsiusTemperature);
+      insertTempsInHTML(fromTemp);
     }
 
     if(fromTemp === "K") {
-      const kelvinTemperature = convertToKelvin(fromTemp);
-      const celsiusTemperature = convertToCelsius(fromTemp);
-      const fahrenheitTemperature = convertToFahrenheit(fromTemp);
-      console.log("Kelvin: ", kelvinTemperature);
-      console.log("Fahrenheit: ", fahrenheitTemperature);
-      console.log("Celsius: ", celsiusTemperature);
+      insertTempsInHTML(fromTemp);
     }
+
+    userSelect.setAttribute("disabled", true);
+
+    [].map.call(teclas, (el) => {
+      return el.setAttribute("disabled", true);
+    })
+  }
+
+  
+  const handleReset = () => {
+    [].map.call(teclas, (el) => {
+      return el.removeAttribute("disabled");
+    });
+
+    [].map.call(resultados, (el) => {
+      if(el.hasChildNodes()) {
+        return el.removeChild(el.firstChild);
+      }
+    });
+
+    userSelect.removeAttribute("disabled");
+    setTemperature("");
   }
   
   return (
@@ -156,7 +178,7 @@ const TemperatureConverter = () => {
         <button onClick={() => handleTemperature(".")} className="virgula tecla">,</button>
         <button onClick={() => handleBackspace()} className="limpa tecla"></button>
         <button onClick={() => handleTemperature("-")} className="negativo tecla">-</button>
-        <div className="reset tecla">Nova conversão</div>
+        <div onClick={() => handleReset()} className="reset tecla">Nova conversão</div>
       </aside>
     </>
   );
